@@ -4,7 +4,7 @@ import static spark.Spark.after;
 
 import server.csvapi.annotations.LoadAnnotationsHandler;
 import server.csvapi.annotations.SaveAnnotationsHandler;
-import server.csvapi.geoJSON.GeoSearch;
+import server.csvapi.geoJSON.IngredientsHandler;
 import spark.Spark;
 
 /**
@@ -24,7 +24,7 @@ public class Server {
       response.header("Access-Control-Allow-Origin", "*");
       response.header("Access-Control-Allow-Methods", "*");
     });
-    Spark.get("GeoSearch", new GeoSearch());
+    Spark.get("ingredients", new IngredientsHandler());
     /*
      * Note: the frontend uses the GeoSearch handler using the following request
      * that is equivalent to loading in all possible coordinates.
