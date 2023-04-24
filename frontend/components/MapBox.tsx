@@ -176,7 +176,7 @@ export default function MapBox() {
           confirmMsg={confirmMessage}
         />
       )}
-      <Map
+      {/* <Map
         ref={mapRef}
         onClick={onMapClick}
         longitude={viewState.longitude}
@@ -205,7 +205,7 @@ export default function MapBox() {
         <Source id="geo_data" type="geojson" data={overlay}>
           <Layer {...geoLayer} />
         </Source>
-      </Map>
+      </Map> */}
     </div>
   );
 }
