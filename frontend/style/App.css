@@ -1,12 +1,12 @@
 /* Styling code from Maps Gearup*/
 .App {
   text-align: center;
-  max-width: 40rem;  
+  max-width: 80%;  
   margin: 2rem auto;  
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: hsl(220, 13%, 18%);
   min-height: 20vh;
   display: flex;
   flex-direction: column;
@@ -15,3 +15,35 @@
   font-size: calc(1px + 2vmin);
   color: white;
 }
+
+.inline{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.col{
+  max-width: 70%;
+  margin: 1rem;
+}
+
+.submit{
+  margin-left: 1rem;
+  max-width: 30%;
+}
+
+.recipe-box {
+  text-align: left;
+  border: black ridge 1px;
+  border-radius: 10px;
+  margin: 3px;
+  width: 20rem;
+  padding-left: 10px;
+}
+
+
+
+
+
+
+
