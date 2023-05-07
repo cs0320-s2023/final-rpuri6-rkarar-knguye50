@@ -1,6 +1,8 @@
 /* Styling code from Maps Gearup*/
 .App {
   text-align: center;
+  max-width: 40rem;  
+  margin: 2rem auto;  
 }
 
 .App-header {

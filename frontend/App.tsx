@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style/App.css";
-import MapBox from "./components/MapBox";
+import { IngredientsMultiSelect } from "./recipe app/InputIngredients";
+
 
 /**
  * App class that creates the MapBox element that displays
@@ -11,7 +12,7 @@ import MapBox from "./components/MapBox";
 function App() {
   return (
     <div className="App">
-      <MapBox></MapBox>
+      <IngredientsMultiSelect></IngredientsMultiSelect>
     </div>
   );
 }
