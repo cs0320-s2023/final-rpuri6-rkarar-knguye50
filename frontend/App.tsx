@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style/App.css";
-import { IngredientsMultiSelect } from "./recipe app/InputIngredients";
-import { Recipes } from "./recipe app/Recipes";
+import { IngredientsMultiSelect } from "./components/InputIngredients";
+import { Recipes } from "./components/Recipes";
 
 
 /**
