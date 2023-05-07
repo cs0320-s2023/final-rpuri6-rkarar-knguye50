@@ -1,6 +1,8 @@
 package server.csvapi.geoJSON;
 
 import com.squareup.moshi.Json;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +16,14 @@ public class IngredientRecord {
    *
    * @param type - type field
    */
-  public record Recipe(@Json(name = "title") String title, @Json(name = "usedIngredients") List<Ingredient> usedIngredients) {
+  public record RecipeIDList(List<RecipeFromIngredients> recipeIDList){};
+  public record RecipeFromIngredients(@Json(name = "id") Integer id){
 
   }
-  public record Ingredient() {
+  public record Ingredient(@Json(name = "name") String name, @Json(name = "id") Integer id) {
+
+  }
+  public record Recipe(@Json(name = "title") String title, @Json(name = "id") Integer id) {
 
   }
 }
