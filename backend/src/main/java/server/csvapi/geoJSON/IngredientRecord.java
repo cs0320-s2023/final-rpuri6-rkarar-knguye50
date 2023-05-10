@@ -16,8 +16,8 @@ public class IngredientRecord {
    *
    * @param type - type field
    */
-  public record RecipeIDList(List<RecipeFromIngredients> recipeIDList){};
-  public record RecipeFromIngredients(@Json(name = "id") Integer id){
+  public record RecipeIDList(List<RecipeFromIngredients> recipes){};
+  public record RecipeFromIngredients(@Json(name = "id") Integer id, @Json(name="title") String title){
 
   }
   public record Ingredient(@Json(name = "name") String name, @Json(name = "id") Integer id) {

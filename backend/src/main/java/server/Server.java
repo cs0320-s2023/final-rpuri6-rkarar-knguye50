@@ -25,11 +25,6 @@ public class Server {
       response.header("Access-Control-Allow-Methods", "*");
     });
     Spark.get("Recipe", new IngredientsHandler());
-    /*
-     * Note: the frontend uses the GeoSearch handler using the following request
-     * that is equivalent to loading in all possible coordinates.
-     * http://localhost:3232/GeoSearch?minLat=-90&minLong=-180&maxLat=90&maxLong=180
-     */
 
     Spark.init();
     Spark.awaitInitialization();
