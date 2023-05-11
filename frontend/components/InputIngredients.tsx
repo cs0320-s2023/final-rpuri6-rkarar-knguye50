@@ -12,6 +12,7 @@ const ingredients = await fetch('http://127.0.0.1:5000/ingredients', {method: 'G
     .then(function(data){return Object.values(data.result)})
     .catch(error => console.log(error));
 
+  
 
 // let callback = (data) => {
 //   console.log(Object.values(data.result))
@@ -37,6 +38,9 @@ export const IngredientsMultiSelect = () => {
     const data = await response.json();
     setRecipes(data);
   };
+  const [query, setQuery] = useState("")
+ 
+
  
 
   // source for multi-select: https://www.telerik.com/blogs/quick-guide-dropdown-menus-react 
@@ -48,6 +52,27 @@ export const IngredientsMultiSelect = () => {
       <button className="submit" onClick={handleSubmit}>Find Recipes</button>
       </div>
     </form>
+
+    <div>
+    <input placeholder="Search Recipes" onChange={event => setQuery(event.target.value)} />
+    </div>
+
+  {
+recipes.filter(recipe => {
+  if (query === '') {
+    return recipe;
+  } else if (recipe.title.toLowerCase().includes(query.toLowerCase())) {
+    return recipe;
+  }
+}).map((recipe, index) => (
+  <div className="box" key={index}>
+    <h2>{recipe.title}</h2>
+          <img src={recipe.image} alt={recipe.title} />
+  </div>
+))
+}
     </>
+
+ 
   );  
 };  

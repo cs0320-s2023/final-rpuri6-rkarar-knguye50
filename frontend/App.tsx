@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="App">
       <IngredientsMultiSelect></IngredientsMultiSelect>
-      <Recipes></Recipes>
+      {/* <Recipes></Recipes> */}
     </div>
   );
 }
