@@ -23,7 +23,8 @@ public class IngredientRecord {
   public record Ingredient(@Json(name = "name") String name, @Json(name = "id") Integer id) {
 
   }
-  public record Recipe(@Json(name = "title") String title, @Json(name = "id") Integer id) {
+  public record Recipe(@Json(name = "title") String title, @Json(name = "id") Integer id, @Json(name="image") String imageLink,
+                       @Json(name = "spoonacularSourceUrl") String recipeLink){
 
   }
 }

@@ -16,8 +16,10 @@ import okio.Buffer;
 public class IngredientFunc {
     private int responseCode = 0;
     private String responseBody = "";
-    private String firstUrl = "";
-    private String secondUrl = "";
+    //Number of recipes displayed per api call, default to 5
+    private int numRecipes = 5;
+    //api key
+    private String key = "255004c1a7344062bc69069ed63ea0e8";
     public IngredientFunc() {
 
     }
@@ -90,7 +92,6 @@ public class IngredientFunc {
     private ArrayList<IngredientRecord.Recipe> getRecipes(ArrayList<Integer> recipeIds) throws IOException {
         ArrayList<IngredientRecord.Recipe> recipes = new ArrayList<>();
         // Will move to private github folder later
-        String key = "255004c1a7344062bc69069ed63ea0e8";
         for (Integer recipeID : recipeIds) {
             String recipeURL =  "https://api.spoonacular.com/recipes/" + recipeID.toString() +"/information?" + "&apiKey=" + key;
             System.out.println(recipeURL);
@@ -103,13 +104,12 @@ public class IngredientFunc {
     public HashMap<String, Object> startRequest(String ingredientsRaw)
             throws IOException {
         // Will move to private github folder later
-        String key = "255004c1a7344062bc69069ed63ea0e8";
         HashMap<String, Object> output = new HashMap<>();
         // Converts the raw ingredient string from front end to an array (Expected Format: apple,milk,cereal)
         String ingredients = ingredientsRaw.replace(",", ",+");
         //First call to get recipe list based on ingredients
         String requestUrl1 = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + ingredients + "&apiKey=" + key
-                                + "&number=3";
+                                + "&number=" + numRecipes;
 
         ArrayList<Integer> recipeIDs = getRecipeIDs(requestUrl1);
 
