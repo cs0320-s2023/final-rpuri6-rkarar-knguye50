@@ -43,13 +43,19 @@ for document in documents:
     # print("----")
     # print(document)
 
+# Initialize a TFID vectorizer from scikit
 vectorizer = TfidfVectorizer()
 
+# Fit to the current document corpus and convert to a 2D array
 X = vectorizer.fit_transform(documents_clean)
 X = X.T.toarray()
 
+# Initialize a dataframe with fitted vector array
 df = pd.DataFrame(X, index=vectorizer.get_feature_names())
 
+# Function to return correct orderings of the document corpus
+# Input - search query, the dataframe made by the cleaned corpus of the vectors converted to a 2D array on which the search is to be performed
+# Output - A dictionary with the keys as the docuemnt index in the corpus and values as their similarity score
 def search_query(query, dataframe):
   query = [query]
   q_vec = vectorizer.transform(query).toarray().reshape(dataframe.shape[0],)

@@ -10,24 +10,32 @@ from flask_cors import CORS
 import json
 from bs4 import BeautifulSoup 
 from flask import Flask, jsonify
+import pytest
 
 app = Flask(__name__)
 CORS(app)
 
+#Defining the route for getting ingredients sourced from local stores
 @app.route('/ingredients')
+# Function for getting ingredients
+# Input - empty
+# Output - list of ingredients scraped from the websites TJ Max and CVS
 def get_ingredients():
-    # URLs for scraping
+    # URLs for scraping, these are URLs linking to the "New Items" pages of these stores in Providence, RI 
     TJURL = 'https://www.traderjoes.com/home/products/category?filters=%7B%22areNewProducts%22%3Atrue%7D'
     CVSURL = "https://www.cvs.com/shop/merch/new/q/Grocery/c1?widgetID=ojdve0je&mc=cat2000008&icid=shop-new-arrivals-cat7-grocery"
 
-    # Driver initializing
+    # Initializing the chrome webdriver
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
+    # Function to scrape the TJ Max website and return the list of new product titles
+    # Input - Link to the URL to be scraped
+    # Output - List of product names found on the website
     def tj(link):
-        # Get URLs
+        # Get URL
         driver.get(link)
-        # Wait for button clickable
         wait = WebDriverWait(driver, 10)
+        # Wait for the button with given class to be clickable
         wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ProductCard_card__info__2M2Ao")))
         # Get names of new products
         products =  driver.find_elements(By.CLASS_NAME, "ProductCard_card__info__2M2Ao")
@@ -39,9 +47,12 @@ def get_ingredients():
         if len(pList)==0:
             print("pList is empty")
         return pList
-
+    
+    # Function to scrape the CVS website and return the list of new product titles
+    # Input - Link to the URL to be scraped
+    # Output - List of product names found on the website
     def cvs(link):
-        # Get URLs
+        # Get URL
         driver.get(link)
         sList = []
         # Get all titles
