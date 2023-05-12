@@ -38,11 +38,11 @@ public class IngredientFunc {
             try {
                 response = serializer.fromJson(
                         new Buffer().readFrom(clientConnection.getInputStream()));
-                System.out.println(response.toString());
             } catch (IOException e) {
                 clientConnection.disconnect();
                 System.out.println("READJSON FAIL");
                 System.out.println(e.getMessage());
+                return response;
             }
         }
         clientConnection.disconnect();
@@ -71,6 +71,7 @@ public class IngredientFunc {
         clientConnection.disconnect();
         return response;
     }
+    // Gets Recipe IDs based on ingredients given
     private ArrayList<Integer> getRecipeIDs(String firstURL) throws IOException {
         ArrayList<Integer> recipeIDs = new ArrayList<>();
 
@@ -85,16 +86,14 @@ public class IngredientFunc {
         for(int i = 0; i < firstList.size(); i++) {
             recipeIDs.add(firstList.get(i).id());
         }
-        System.out.println(recipeIDs);
         return recipeIDs;
     }
-
+    // Makes 2nd API call to grab detailed recipe information given recipe IDs
     private ArrayList<IngredientRecord.Recipe> getRecipes(ArrayList<Integer> recipeIds) throws IOException {
         ArrayList<IngredientRecord.Recipe> recipes = new ArrayList<>();
         // Will move to private github folder later
         for (Integer recipeID : recipeIds) {
             String recipeURL =  "https://api.spoonacular.com/recipes/" + recipeID.toString() +"/information?" + "&apiKey=" + key;
-            System.out.println(recipeURL);
             IngredientRecord.Recipe recipe = readJson(recipeURL, IngredientRecord.Recipe.class);
             recipes.add(recipe);
 
@@ -106,7 +105,7 @@ public class IngredientFunc {
         // Will move to private github folder later
         HashMap<String, Object> output = new HashMap<>();
         // Converts the raw ingredient string from front end to an array (Expected Format: apple,milk,cereal)
-        String ingredients = ingredientsRaw.replace(",", ",+");
+        final String ingredients = ingredientsRaw.replace(",", ",+");
         //First call to get recipe list based on ingredients
         String requestUrl1 = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + ingredients + "&apiKey=" + key
                                 + "&number=" + numRecipes;
@@ -114,7 +113,7 @@ public class IngredientFunc {
         ArrayList<Integer> recipeIDs = getRecipeIDs(requestUrl1);
 
         if(recipeIDs.get(0) == -1) {
-            output.put("error", "getrecipeID error caught");
+            output.put("error", "getrecipeID error caught, check console");
             return output;
         }
         if (responseCode != 200) {
@@ -130,6 +129,24 @@ public class IngredientFunc {
         }
         ArrayList<IngredientRecord.Recipe> recipes = getRecipes(recipeIDs);
         //ERROR CHECK 2nd CALL HERE
+        if (responseCode != 200) {
+            output.put("Error", "Something went wrong with the API Call to recipes/information");
+            output.put("recipe list", recipes);
+            output.put("error code", responseCode);
+            output.put("error message", responseBody);
+            return output;
+        }
+        if (recipes.size() == 0) {
+            output.put("Error", "No suitable recipes found");
+            output.put("Ingredients Given", ingredients);
+            return output;
+        }
+        if(recipes.size() > numRecipes) {
+            output.put("Error", "more recipes returned than allowed for");
+            output.put("Ingredients Given", ingredients);
+            output.put("recipe list", recipes);
+            return output;
+        }
         output.put("recipes", recipes);
 
         return output;
