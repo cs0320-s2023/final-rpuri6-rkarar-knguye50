@@ -1,9 +1,6 @@
 package server;
 
 import static spark.Spark.after;
-
-import server.csvapi.annotations.LoadAnnotationsHandler;
-import server.csvapi.annotations.SaveAnnotationsHandler;
 import server.csvapi.geoJSON.IngredientsHandler;
 import spark.Spark;
 
