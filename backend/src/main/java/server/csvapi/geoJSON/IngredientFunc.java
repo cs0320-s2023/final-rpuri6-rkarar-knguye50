@@ -105,44 +105,55 @@ public class IngredientFunc {
         // Will move to private github folder later
         HashMap<String, Object> output = new HashMap<>();
         // Converts the raw ingredient string from front end to an array (Expected Format: apple,milk,cereal)
+        // Ingredients that are multiple words (tomato juice) will follow the format (tomato+juice)
+        if(ingredientsRaw.isEmpty()) {
+            output.put("error_message", "no ingredients received");
+            return output;
+        }
         final String ingredients = ingredientsRaw.replace(",", ",+");
+        if(ingredients.isEmpty()) {
+            output.put("error_message", "no ingredients recieved (after parse)");
+            return output;
+        }
         //First call to get recipe list based on ingredients
         String requestUrl1 = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + ingredients + "&apiKey=" + key
                                 + "&number=" + numRecipes;
 
         ArrayList<Integer> recipeIDs = getRecipeIDs(requestUrl1);
 
+        if (recipeIDs.size() == 0 ) {
+            output.put("error_message", "No suitable recipes found (ingredient error)");
+            return output;
+        }
         if(recipeIDs.get(0) == -1) {
-            output.put("error", "getrecipeID error caught, check console");
+            output.put("error_message", "getrecipeID error caught, check console");
             return output;
         }
         if (responseCode != 200) {
-            output.put("Error", "Something went wrong with the API Call to findByIngredients");
+            output.put("error_message", "Something went wrong with the API Call to findByIngredients");
             output.put("Api Call: ", requestUrl1);
             output.put("error code", responseCode);
             output.put("error message", responseBody);
             return output;
         }
-        if (recipeIDs.size() == 0 ) {
-            output.put("Error", "No suitable recipes found");
-            return output;
-        }
+
+
         ArrayList<IngredientRecord.Recipe> recipes = getRecipes(recipeIDs);
         //ERROR CHECK 2nd CALL HERE
         if (responseCode != 200) {
-            output.put("Error", "Something went wrong with the API Call to recipes/information");
+            output.put("error_message", "Something went wrong with the API Call to recipes/information");
             output.put("recipe list", recipes);
             output.put("error code", responseCode);
             output.put("error message", responseBody);
             return output;
         }
         if (recipes.size() == 0) {
-            output.put("Error", "No suitable recipes found");
+            output.put("error_message", "No suitable recipes found");
             output.put("Ingredients Given", ingredients);
             return output;
         }
         if(recipes.size() > numRecipes) {
-            output.put("Error", "more recipes returned than allowed for");
+            output.put("error_message", "more recipes returned than allowed for");
             output.put("Ingredients Given", ingredients);
             output.put("recipe list", recipes);
             return output;
