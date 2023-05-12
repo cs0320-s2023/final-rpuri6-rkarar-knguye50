@@ -1,18 +1,30 @@
 import { MultiSelect } from "@progress/kendo-react-dropdowns"; 
 import '@progress/kendo-theme-default/dist/all.css'; 
 import React from "react";
+import "../style/ingredients.css"
 // import { ingredients } from ... ?
 import { useState } from "react";  
 import { mockRecipes } from "../data/mockRecipes";
 import { ScaleControl } from "react-map-gl";
 
 var rList = []
-const ingredients = await fetch('http://127.0.0.1:5000/ingredients', {method: 'GET'})
+var oFlag = 0
+var ingredients: any[] = ["Carrots"]
+const handleScrape = async() => {
+  await fetch('http://127.0.0.1:5000/ingredients-cache', {method: 'GET'})
     .then(response => response.json())
-    .then(function(data){return Object.values(data.result)})
+    .then(function(data){
+      if (oFlag != 1){
+          for (let i=0;i<Object.values(data.result).flat().length;i++){
+            ingredients.push(Object.values(data.result).flat()[i])
+          }
+          console.log(ingredients)
+          oFlag = 1
+          return ingredients
+        }
+      })
     .catch(error => console.log(error));
-
-  
+}
 
 // let callback = (data) => {
 //   console.log(Object.values(data.result))
@@ -34,8 +46,12 @@ export const IngredientsMultiSelect = () => {
   const [recipes, setRecipes] = useState([]);
   const handleSubmit = async (selectedIngredients) => {
     // replace with back-end call to get the recipes
-    const response = await fetch(`http://localhost:3232/recipes?ingredients=${selectedIngredients}`);
+    console.log("trigger")
+    const response = await fetch(`http://localhost:3232/Recipe?ingredients=${selectedIngredients}`);
+    console.log("trigger t")
     const data = await response.json();
+    console.log("HERE")
+    console.log(data)
     setRecipes(data);
   };
   const [query, setQuery] = useState("")
@@ -50,6 +66,7 @@ export const IngredientsMultiSelect = () => {
       <div className="inline">
       <MultiSelect className="col" data={ingredients} value={selectedIngredients} onChange={onChange} autoClose={false} />
       <button className="submit" onClick={handleSubmit}>Find Recipes</button>
+      <a className="scrape-a" onClick={handleScrape}>Scrape Recipes</a>
       </div>
     </form>
 

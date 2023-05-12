@@ -16,11 +16,13 @@ app = Flask(__name__)
 CORS(app)
 
 #Defining the route for getting ingredients sourced from local stores
+cache = []
 @app.route('/ingredients')
 # Function for getting ingredients
 # Input - empty
 # Output - list of ingredients scraped from the websites TJ Max and CVS
 def get_ingredients():
+    base_ingredients = ["Carrots", "Tomatoes", "Milk", "Pasta"]
     # URLs for scraping, these are URLs linking to the "New Items" pages of these stores in Providence, RI 
     TJURL = 'https://www.traderjoes.com/home/products/category?filters=%7B%22areNewProducts%22%3Atrue%7D'
     CVSURL = "https://www.cvs.com/shop/merch/new/q/Grocery/c1?widgetID=ojdve0je&mc=cat2000008&icid=shop-new-arrivals-cat7-grocery"
@@ -32,11 +34,13 @@ def get_ingredients():
     # Input - Link to the URL to be scraped
     # Output - List of product names found on the website
     def tj(link):
+        print(cache)
         # Get URL
         driver.get(link)
-        wait = WebDriverWait(driver, 10)
-        # Wait for the button with given class to be clickable
-        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ProductCard_card__info__2M2Ao")))
+        # wait = WebDriverWait(driver, 5)
+        # # Wait for the button with given class to be clickable
+        # wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ProductCard_card__info__2M2Ao")))
+        time.sleep(5)
         # Get names of new products
         products =  driver.find_elements(By.CLASS_NAME, "ProductCard_card__info__2M2Ao")
         pList = []
@@ -46,6 +50,7 @@ def get_ingredients():
                 pList.append(element.text)
         if len(pList)==0:
             print("pList is empty")
+            scraped = 1
         return pList
     
     # Function to scrape the CVS website and return the list of new product titles
@@ -63,13 +68,24 @@ def get_ingredients():
         if len(sList)==0:
             print("sList is empty")
         return sList
-    fList = cvs(CVSURL) + tj(TJURL)
+    fList = tj(TJURL) + cvs(CVSURL) + base_ingredients
+    cache.append(fList)
     response = {
         "scraped": "cvs-tdjs",
         "result":fList
     }
     jsonify(response)
     return response
+@app.route('/ingredients-cache')
+def get_loaded():
+    print(cache)
+    response = {
+        "scraped": "cvs-tdjs",
+        "result":cache
+    }
+    jsonify(response)
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True)
     
