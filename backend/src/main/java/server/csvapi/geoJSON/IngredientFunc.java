@@ -80,7 +80,6 @@ public class IngredientFunc {
             firstList = readListJson(firstURL,IngredientRecord.RecipeFromIngredients.class);
         } catch (IOException e) {
             recipeIDs.add(0, -1);
-            System.out.println(e.getMessage());
             return recipeIDs;
         }
         for(int i = 0; i < firstList.size(); i++) {
