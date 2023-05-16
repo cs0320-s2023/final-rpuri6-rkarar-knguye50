@@ -1,7 +1,7 @@
 package server;
 
 import static spark.Spark.after;
-import server.csvapi.geoJSON.IngredientsHandler;
+import server.recipeAPI.ingredientJSON.IngredientsHandler;
 import spark.Spark;
 
 /**

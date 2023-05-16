@@ -1,4 +1,4 @@
-package tests;
+package java.tests;
 import com.squareup.moshi.Moshi;
 import okio.Buffer;
 import org.junit.Assert;
@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
-import server.csvapi.geoJSON.IngredientsHandler;
+import server.recipeAPI.ingredientJSON.IngredientsHandler;
 import spark.Spark;
 
 import java.io.IOException;

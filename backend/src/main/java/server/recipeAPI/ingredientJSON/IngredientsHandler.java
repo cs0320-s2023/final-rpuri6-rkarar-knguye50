@@ -1,9 +1,8 @@
-package server.csvapi.geoJSON;
+package server.recipeAPI.ingredientJSON;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import java.io.IOException;
 import java.util.*;
 
 import spark.Response;
