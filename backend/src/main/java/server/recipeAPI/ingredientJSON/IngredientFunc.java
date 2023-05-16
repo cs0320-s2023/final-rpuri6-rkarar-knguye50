@@ -1,4 +1,4 @@
-package server.csvapi.geoJSON;
+package server.recipeAPI.ingredientJSON;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;

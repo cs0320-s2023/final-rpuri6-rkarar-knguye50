@@ -1,12 +1,15 @@
-package server.csvapi.geoJSON;
+package server.recipeAPI.ingredientJSON;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+
 import java.util.*;
+
 import spark.Response;
 import spark.Route;
-
-/** Load handler class handles API requests for load_file. */
+/**
+ * Load handler class handles API requests for load_file.
+ */
 public class IngredientsHandler implements Route {
   @Override
   public Object handle(spark.Request request, Response response) throws Exception {
@@ -20,4 +23,7 @@ public class IngredientsHandler implements Route {
     output = ingredientFunc.startRequest(ingredients);
     return serializer.toJson(output);
   }
+
+
 }
+
