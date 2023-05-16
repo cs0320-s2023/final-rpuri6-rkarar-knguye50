@@ -1,4 +1,3 @@
-package java.tests;
 import com.squareup.moshi.Moshi;
 import okio.Buffer;
 import org.junit.Assert;
