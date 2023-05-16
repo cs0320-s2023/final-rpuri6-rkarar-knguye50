@@ -21,6 +21,7 @@ var ingredients: ingOption[] = [
   { label: 'Carrots', value: 'Carrots'},
 ]
 
+
 const handleScrape = async() => {
   await fetch('http://127.0.0.1:5000/ingredients-cache', {method: 'GET'})
     .then(response => response.json())
@@ -54,49 +55,76 @@ const handleScrape = async() => {
 export const IngredientsMultiSelect = () => { 
   const animatedComponents = makeAnimated(); 
   const [selectedIngredients, setSelectedIngredients] = useState([]);  
-  const onChange = event => setSelectedIngredients([...event.value]); 
+  const [ingOptions, setIngOptions] = useState([])
+  // const onChange = event => console.log(event.target.value); 
+  // setSelectedIngredients([...event.target.value]); 
+
+  // const onChange = event => {
+  //   console.log(event.target.value);
+  //   setSelectedIngredients(event.target.value);
+  // };
+
+    // handle onChange event of the dropdown
+    const onChange = (e) => {
+      setSelectedIngredients(Array.isArray(e) ? e.map(x => x.value) : []);
+    }
   const [recipes, setRecipes] = useState([]);
-  const handleSubmit = async (selectedIngredients) => {
+  const handleSubmit = async () => {
+    console.log({selectedIngredients});
     console.log("trigger")
     const response = await fetch(`http://localhost:3232/Recipe?ingredients=${selectedIngredients}`);
     console.log("trigger t")
-    const data = await response.json();
+    const recipeJson = await response.json();
     console.log("HERE")
-    console.log(data)
-    setRecipes(data);
+    console.log(recipeJson)
+    setRecipes(recipeJson);
   };
   const [query, setQuery] = useState("")
  
 
+  
 
 
   // source for multi-select: https://react-select.com/home 
   return (  
 
     <> 
-    <div> <h4> Start by clicking the button below to compile available ingredients from Trader Joe's and CVS </h4></div>
+    <div> <h4> Start by clicking the button below to compile available sale ingredients from Trader Joe's and CVS </h4></div>
     <a className="scrape-a" onClick={handleScrape}>Scrape Ingredients</a>
     <p> -- </p>
     <div> <h4> Select your available ingredients </h4></div>
     <form>
-    <div>
+      <div className="inline">
     <Select
+    className="col"
     closeMenuOnSelect={false}
     components={animatedComponents}
     defaultValue={[]}
     isMulti
     options={ingredients}
+    value={selectedIngredients}
+    onChange={onChange}
   />
-  <div></div>
+   <Select
+        className="dropdown"
+        placeholder="Select Option"
+        value={ingredients.filter(obj => selectedIngredients.includes(obj.label))} // set selected values
+        options={ingredients} // set list of the data
+        onChange={onChange} // assign onChange function
+        isMulti
+        isClearable
+      />
+
       {/* <MultiSelect className="col" data={ingredients} value={selectedIngredients} onChange={onChange} autoClose={false} /> */}
       <a><button className="submit" onClick={handleSubmit}>Find Recipes</button></a>
   
       </div>
-    </form>
+      </form>
 
     <div>
-    <input placeholder="Search Recipes" onChange={event => setQuery(event.target.value)} />
+    <input className="search" placeholder="Search Recipes" onChange={event => setQuery(event.target.value)} />
     </div>
+
 
   {
 recipes.filter(recipe => {
