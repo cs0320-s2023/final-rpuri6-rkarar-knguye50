@@ -13,11 +13,12 @@ var rList = []
 var oFlag = 0
 
 interface ingOption {
-  readonly label: string;
+   label: any;
+   value: any;
 }
 
-var ingredients: readonly ingOption[] = [
-  { label: 'Carrots' },
+var ingredients: ingOption[] = [
+  { label: 'Carrots', value: 'Carrots'},
 ]
 
 const handleScrape = async() => {
@@ -26,7 +27,7 @@ const handleScrape = async() => {
     .then(function(data){
       if (oFlag != 1){
           for (let i=0;i<Object.values(data.result).flat().length;i++){
-            ingredients.push(Object.values(data.result).flat()[i])
+            ingredients.push({label: Object.values(data.result).flat()[i], value: Object.values(data.result).flat()[i]})
           }
           console.log(ingredients)
           oFlag = 1
@@ -56,7 +57,6 @@ export const IngredientsMultiSelect = () => {
   const onChange = event => setSelectedIngredients([...event.value]); 
   const [recipes, setRecipes] = useState([]);
   const handleSubmit = async (selectedIngredients) => {
-    // replace with back-end call to get the recipes
     console.log("trigger")
     const response = await fetch(`http://localhost:3232/Recipe?ingredients=${selectedIngredients}`);
     console.log("trigger t")
@@ -76,6 +76,7 @@ export const IngredientsMultiSelect = () => {
     <> 
     <div> <h4> Start by clicking the button below to compile available ingredients from Trader Joe's and CVS </h4></div>
     <a className="scrape-a" onClick={handleScrape}>Scrape Ingredients</a>
+    <p> -- </p>
     <div> <h4> Select your available ingredients </h4></div>
     <form>
     <div>
@@ -86,9 +87,9 @@ export const IngredientsMultiSelect = () => {
     isMulti
     options={ingredients}
   />
-  
+  <div></div>
       {/* <MultiSelect className="col" data={ingredients} value={selectedIngredients} onChange={onChange} autoClose={false} /> */}
-      <button className="submit" onClick={handleSubmit}>Find Recipes</button>
+      <a><button className="submit" onClick={handleSubmit}>Find Recipes</button></a>
   
       </div>
     </form>
