@@ -1,15 +1,25 @@
-import { MultiSelect } from "@progress/kendo-react-dropdowns"; 
-import '@progress/kendo-theme-default/dist/all.css'; 
+
 import React from "react";
 import "../style/ingredients.css"
+
 // import { ingredients } from ... ?
 import { useState } from "react";  
 import { mockRecipes } from "../data/mockRecipes";
 import { ScaleControl } from "react-map-gl";
+import Select from "react-select";
+import makeAnimated from 'react-select/animated';
 
 var rList = []
 var oFlag = 0
-var ingredients: any[] = ["Carrots"]
+
+interface ingOption {
+  readonly label: string;
+}
+
+var ingredients: readonly ingOption[] = [
+  { label: 'Carrots' },
+]
+
 const handleScrape = async() => {
   await fetch('http://127.0.0.1:5000/ingredients-cache', {method: 'GET'})
     .then(response => response.json())
@@ -40,7 +50,8 @@ const handleScrape = async() => {
 
 
 // replace with imported list of scraped ingredients. how to make this list dynamic?
-export const IngredientsMultiSelect = () => {  
+export const IngredientsMultiSelect = () => { 
+  const animatedComponents = makeAnimated(); 
   const [selectedIngredients, setSelectedIngredients] = useState([]);  
   const onChange = event => setSelectedIngredients([...event.value]); 
   const [recipes, setRecipes] = useState([]);
@@ -57,16 +68,28 @@ export const IngredientsMultiSelect = () => {
   const [query, setQuery] = useState("")
  
 
- 
 
-  // source for multi-select: https://www.telerik.com/blogs/quick-guide-dropdown-menus-react 
+
+  // source for multi-select: https://react-select.com/home 
   return (  
-    <><form className="k-form k-my-8">
-      <label className="k-label k-mb-3">Input your ingredients here</label>
-      <div className="inline">
-      <MultiSelect className="col" data={ingredients} value={selectedIngredients} onChange={onChange} autoClose={false} />
+
+    <> 
+    <div> <h4> Start by clicking the button below to compile available ingredients from Trader Joe's and CVS </h4></div>
+    <a className="scrape-a" onClick={handleScrape}>Scrape Ingredients</a>
+    <div> <h4> Select your available ingredients </h4></div>
+    <form>
+    <div>
+    <Select
+    closeMenuOnSelect={false}
+    components={animatedComponents}
+    defaultValue={[]}
+    isMulti
+    options={ingredients}
+  />
+  
+      {/* <MultiSelect className="col" data={ingredients} value={selectedIngredients} onChange={onChange} autoClose={false} /> */}
       <button className="submit" onClick={handleSubmit}>Find Recipes</button>
-      <a className="scrape-a" onClick={handleScrape}>Scrape Recipes</a>
+  
       </div>
     </form>
 
@@ -93,3 +116,5 @@ recipes.filter(recipe => {
  
   );  
 };  
+
+const animatedComponents = makeAnimated();

@@ -44,7 +44,7 @@ public class LoadAnnotationsHandler implements Route {
   /**
    * Handle method to send all saved annotation instances to the frontend.
    *
-   * @param request  - normally has arguments of request, none used here.
+   * @param request - normally has arguments of request, none used here.
    * @param response - unused here
    * @return - JSON string, if no annotations exist yet, empty string
    */
@@ -57,6 +57,4 @@ public class LoadAnnotationsHandler implements Route {
     }
     return toJson(annotations);
   }
-
-
 }

@@ -1,6 +1,7 @@
 package server;
 
 import static spark.Spark.after;
+
 import server.csvapi.geoJSON.IngredientsHandler;
 import spark.Spark;
 
@@ -17,11 +18,14 @@ public class Server {
    */
   public static void main(String[] args) {
     Spark.port(3232);
-    after((request, response) -> {
-      response.header("Access-Control-Allow-Origin", "*");
-      response.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,");
-      response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    });
+    after(
+        (request, response) -> {
+          response.header("Access-Control-Allow-Origin", "*");
+          response.header(
+              "Access-Control-Allow-Headers",
+              "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,");
+          response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+        });
     Spark.get("Recipe", new IngredientsHandler());
 
     Spark.init();

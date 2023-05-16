@@ -13,9 +13,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Save annotations handler that updates and maintains all stored annotations from the frontend.
- */
+/** Save annotations handler that updates and maintains all stored annotations from the frontend. */
 public class SaveAnnotationsHandler implements Route {
 
   // instance variable of the annotations list.
@@ -38,7 +36,7 @@ public class SaveAnnotationsHandler implements Route {
   /**
    * Handle method that serves to save the annotations from a frontend session in the server.
    *
-   * @param request  - used to determine the contents of the annotations sent by the frontend.
+   * @param request - used to determine the contents of the annotations sent by the frontend.
    * @param response - unused
    * @return - JSON string response for frontend.
    */
@@ -99,5 +97,4 @@ public class SaveAnnotationsHandler implements Route {
   public List<AnnotationInstance> getAnnotations() {
     return this.annotations;
   }
-
 }
