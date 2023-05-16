@@ -1,4 +1,3 @@
-package java.tests;
 import com.squareup.moshi.Moshi;
 import okio.Buffer;
 import org.junit.Assert;
@@ -6,6 +5,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
+import server.recipeAPI.ingredientJSON.IngredientRecord;
 import server.recipeAPI.ingredientJSON.IngredientsHandler;
 import spark.Spark;
 
@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.List;
 public class testIngredients {
     @BeforeAll
     public static void setup_before_everything() {
@@ -52,6 +52,26 @@ public class testIngredients {
 
         Assert.assertNotNull(response);
         Assert.assertEquals("no ingredients received", response.get("error_message"));
+    }
+
+    @Test
+    public void testFunctionality() throws IOException {
+        Spark.get("Recipe", new IngredientsHandler());
+        Spark.init();
+        Spark.awaitInitialization();
+        System.out.println("Server started.");
+        HttpURLConnection clientConnection = apiCall("Recipe?ingredients=tomato,chocolate");
+        Assert.assertEquals(200, clientConnection.getResponseCode());
+        Moshi moshi = new Moshi.Builder().build();
+        Map<String, Object> response =
+                moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+        Assert.assertNotNull(response);
+        List<IngredientRecord.Recipe> recipes = (List<IngredientRecord.Recipe>) response.get("recipes");
+        IngredientRecord.Recipe recipe = recipes.get(0);
+
+        Assert.assertNotNull(recipe);
+        Assert.assertTrue(recipe.title() == "Lamb In Red Mole Sauce");
     }
 
 }

@@ -16,7 +16,7 @@ public class IngredientFunc {
   private int responseCode = 0;
   private String responseBody = "";
   // Number of recipes displayed per api call, default to 5
-  private int numRecipes = 5;
+  private int numRecipes = 3;
   // api key
   private String key = "255004c1a7344062bc69069ed63ea0e8";
 
