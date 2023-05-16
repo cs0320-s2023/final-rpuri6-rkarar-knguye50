@@ -18,7 +18,7 @@ public class IngredientFunc {
   // Number of recipes displayed per api call, default to 5
   private int numRecipes = 3;
   // api key
-  private String key = "255004c1a7344062bc69069ed63ea0e8";
+  private String key = "6f59cf717388499ab382d32264d358e4";
 
   public IngredientFunc() {}
 
@@ -80,6 +80,10 @@ public class IngredientFunc {
       recipeIDs.add(0, -1);
       return recipeIDs;
     }
+    if(responseCode != 200) {
+      recipeIDs.add(0, -1);
+      return recipeIDs;
+    }
     for (int i = 0; i < firstList.size(); i++) {
       recipeIDs.add(firstList.get(i).id());
     }
@@ -128,7 +132,13 @@ public class IngredientFunc {
             + numRecipes;
 
     ArrayList<Integer> recipeIDs = getRecipeIDs(requestUrl1);
-
+    if (responseCode != 200) {
+      output.put("error_message", "Something went wrong with the API Call to findByIngredients");
+      output.put("Api Call: ", requestUrl1);
+      output.put("error code", responseCode);
+      output.put("error message", responseBody);
+      return output;
+    }
     if (recipeIDs.size() == 0) {
       output.put("error_message", "No suitable recipes found (ingredient error)");
       return output;
@@ -137,13 +147,7 @@ public class IngredientFunc {
       output.put("error_message", "getrecipeID error caught, check console");
       return output;
     }
-    if (responseCode != 200) {
-      output.put("error_message", "Something went wrong with the API Call to findByIngredients");
-      output.put("Api Call: ", requestUrl1);
-      output.put("error code", responseCode);
-      output.put("error message", responseBody);
-      return output;
-    }
+
 
     ArrayList<IngredientRecord.Recipe> recipes = getRecipes(recipeIDs);
     // ERROR CHECK 2nd CALL HERE

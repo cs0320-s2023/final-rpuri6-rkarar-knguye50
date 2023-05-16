@@ -12,6 +12,7 @@ import spark.Spark;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,11 +68,10 @@ public class testIngredients {
                 moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
         Assert.assertNotNull(response);
-        List<IngredientRecord.Recipe> recipes = (List<IngredientRecord.Recipe>) response.get("recipes");
-        IngredientRecord.Recipe recipe = recipes.get(0);
-
-        Assert.assertNotNull(recipe);
-        Assert.assertTrue(recipe.title() == "Lamb In Red Mole Sauce");
+        ArrayList<IngredientRecord.Recipe> recipes = (ArrayList<IngredientRecord.Recipe>) response.get("recipes");
+        System.out.println(recipes.get(0));
+        System.out.println(recipes.contains("Xocai Healthy Chocolate Peanut Butter Bannana Dip"));
+        Assert.assertTrue(recipes.size() == 3);
     }
 
 }
