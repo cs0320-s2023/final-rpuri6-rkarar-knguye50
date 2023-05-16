@@ -97,10 +97,25 @@ function Recipes() {
         {/* <div><b>Selected Value: </b> {JSON.stringify(selectedIngredients, null, 2)}</div> */}
       </div>}
 
-      <a><button className="submit" onClick={handleSubmit}>Find Recipes</button></a>
+    <a className="scrape-a" onClick={handleSubmit}>Find Recipes</a>
       <div>
     <input className="search" placeholder="Search Recipes" onChange={event => setQuery(event.target.value)} />
     </div>
+
+    {
+recipes.filter(recipe => {
+  if (query === '') {
+    return recipe;
+  } else if (recipe.title.toLowerCase().includes(query.toLowerCase())) {
+    return recipe;
+  }
+}).map((recipe, index) => (
+  <div className="box" key={index}>
+    <h2>{recipe.title}</h2>
+          <img src={recipe.image} alt={recipe.title} />
+  </div>
+))
+}
 
       
     </div>
