@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./style/App.css";
-import { IngredientsMultiSelect } from "./components/InputIngredients";
-import { Recipes } from "./components/Recipes";
+import { IngredientsMultiSelect} from "./components/InputIngredients";
+import Recipes from "./components/Recipes";
+
 
 
 /**
@@ -13,8 +14,9 @@ import { Recipes } from "./components/Recipes";
 function App() {
   return (
     <div className="App">
-      <IngredientsMultiSelect></IngredientsMultiSelect>
-      {/* <Recipes></Recipes> */}
+      <Recipes></Recipes>
+      {/* <IngredientsMultiSelect></IngredientsMultiSelect> */}
+      
     </div>
   );
 }

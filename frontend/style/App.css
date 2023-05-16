@@ -17,19 +17,24 @@
 }
 
 .inline{
-  display: flex;
-  flex-flow: row wrap;
   align-items: center;
+  min-width: 100%
 }
 
 .col{
-  max-width: 70%;
   margin: 1rem;
+  float:left;
+  min-width:70%;
 }
 
 .submit{
+  float:right;
+  margin-bottom: 0.5rem;
   margin-left: 1rem;
-  max-width: 30%;
+}
+
+.search{
+  float:right
 }
 
 .recipe-box {
@@ -39,6 +44,10 @@
   margin: 3px;
   width: 20rem;
   padding-left: 10px;
+}
+
+.cssb62m3t-container{
+
 }
 
 
