@@ -69,7 +69,7 @@ public class testIngredients {
         Spark.init();
         Spark.awaitInitialization();
         System.out.println("Server started.");
-        // Tests empty list
+        // Tests integer
         HttpURLConnection clientConnection = apiCall("Recipe?ingredients=1232");
         Assert.assertEquals(200, clientConnection.getResponseCode());
         Moshi moshi = new Moshi.Builder().build();
@@ -94,7 +94,7 @@ public class testIngredients {
 
         Assert.assertNotNull(response);
         ArrayList<IngredientRecord.Recipe> recipes = (ArrayList<IngredientRecord.Recipe>) response.get("recipes");
-        Assert.assertTrue(recipes.size() == Constants.num_recipes);
+        Assert.assertEquals(Constants.num_recipes, recipes.size());
         // Tests resilience in string format and 2 calls on 1 server
         clientConnection = apiCall("Recipe?ingredients=[milk,apple,grapes,]");
         Assert.assertEquals(200, clientConnection.getResponseCode());
@@ -103,8 +103,8 @@ public class testIngredients {
 
         Assert.assertNotNull(response);
         ArrayList<IngredientRecord.Recipe> recipes2 = (ArrayList<IngredientRecord.Recipe>) response.get("recipes");
-        Assert.assertTrue(recipes2.size() == Constants.num_recipes);
-        Assert.assertFalse(recipes.equals(recipes2));
+        Assert.assertEquals(Constants.num_recipes, recipes2.size());
+        Assert.assertNotEquals(recipes, recipes2);
     }
 
 }
