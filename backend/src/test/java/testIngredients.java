@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
+import server.recipeAPI.ingredientJSON.Constants;
 import server.recipeAPI.ingredientJSON.IngredientRecord;
 import server.recipeAPI.ingredientJSON.IngredientsHandler;
 import spark.Spark;
@@ -45,6 +46,7 @@ public class testIngredients {
         Spark.init();
         Spark.awaitInitialization();
         System.out.println("Server started.");
+        // Tests empty list
         HttpURLConnection clientConnection = apiCall("Recipe?ingredients=");
         Assert.assertEquals(200, clientConnection.getResponseCode());
         Moshi moshi = new Moshi.Builder().build();
@@ -53,6 +55,29 @@ public class testIngredients {
 
         Assert.assertNotNull(response);
         Assert.assertEquals("no ingredients received", response.get("error_message"));
+        // Tests misspelt/unidentified ingredient
+        clientConnection = apiCall("Recipe?ingredients=tomatoe");
+        Assert.assertEquals(200, clientConnection.getResponseCode());
+        response =  moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals("No suitable recipes found (ingredient error)", response.get("error_message"));
+    }
+    @Test
+    public void testNewErrors() throws IOException {
+        Spark.get("Recipe", new IngredientsHandler());
+        Spark.init();
+        Spark.awaitInitialization();
+        System.out.println("Server started.");
+        // Tests empty list
+        HttpURLConnection clientConnection = apiCall("Recipe?ingredients=1232");
+        Assert.assertEquals(200, clientConnection.getResponseCode());
+        Moshi moshi = new Moshi.Builder().build();
+        Map<String, Object> response =
+                moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals("No suitable recipes found (ingredient error)", response.get("error_message"));
     }
 
     @Test
@@ -69,9 +94,8 @@ public class testIngredients {
 
         Assert.assertNotNull(response);
         ArrayList<IngredientRecord.Recipe> recipes = (ArrayList<IngredientRecord.Recipe>) response.get("recipes");
-        System.out.println(recipes.get(0));
-        System.out.println(recipes.contains("Xocai Healthy Chocolate Peanut Butter Bannana Dip"));
-        Assert.assertTrue(recipes.size() == 3);
+        System.out.println(recipes.get(0).id());
+        Assert.assertTrue(recipes.size() == Constants.num_recipes);
     }
 
 }

@@ -15,10 +15,6 @@ import okio.Buffer;
 public class IngredientFunc {
   private int responseCode = 0;
   private String responseBody = "";
-  // Number of recipes displayed per api call, default to 5
-  private int numRecipes = 3;
-  // api key
-  private String key = "6f59cf717388499ab382d32264d358e4";
 
   public IngredientFunc() {}
 
@@ -100,7 +96,7 @@ public class IngredientFunc {
               + recipeID.toString()
               + "/information?"
               + "&apiKey="
-              + key;
+              + Constants.key;
       IngredientRecord.Recipe recipe = readJson(recipeURL, IngredientRecord.Recipe.class);
       recipes.add(recipe);
     }
@@ -127,9 +123,9 @@ public class IngredientFunc {
         "https://api.spoonacular.com/recipes/findByIngredients?ingredients="
             + ingredients
             + "&apiKey="
-            + key
+            + Constants.key
             + "&number="
-            + numRecipes;
+            + Constants.num_recipes;
 
     ArrayList<Integer> recipeIDs = getRecipeIDs(requestUrl1);
     if (responseCode != 200) {
@@ -163,7 +159,7 @@ public class IngredientFunc {
       output.put("Ingredients Given", ingredients);
       return output;
     }
-    if (recipes.size() > numRecipes) {
+    if (recipes.size() > Constants.num_recipes) {
       output.put("error_message", "more recipes returned than allowed for");
       output.put("Ingredients Given", ingredients);
       output.put("recipe list", recipes);

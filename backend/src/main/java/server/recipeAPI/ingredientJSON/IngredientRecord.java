@@ -4,15 +4,10 @@ import com.squareup.moshi.Json;
 import java.util.List;
 
 /**
- * GeoJSON class. Contains records of how to shape incoming JSON files from the downloaded geojson.
+ * Ingredients class. Contains records of how to shape incoming JSON files from the api calls
  */
 public class IngredientRecord {
 
-  /**
-   * JsonType Record, should not be used except for error checking or converting to new JSON
-   *
-   * @param type - type field
-   */
   public record RecipeIDList(List<RecipeFromIngredients> recipes) {}
   ;
 
