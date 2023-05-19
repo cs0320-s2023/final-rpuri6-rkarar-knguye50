@@ -94,8 +94,17 @@ public class testIngredients {
 
         Assert.assertNotNull(response);
         ArrayList<IngredientRecord.Recipe> recipes = (ArrayList<IngredientRecord.Recipe>) response.get("recipes");
-        System.out.println(recipes.get(0).id());
         Assert.assertTrue(recipes.size() == Constants.num_recipes);
+        // Tests resilience in string format and 2 calls on 1 server
+        clientConnection = apiCall("Recipe?ingredients=[milk,apple,grapes,]");
+        Assert.assertEquals(200, clientConnection.getResponseCode());
+        response =
+                moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+        Assert.assertNotNull(response);
+        ArrayList<IngredientRecord.Recipe> recipes2 = (ArrayList<IngredientRecord.Recipe>) response.get("recipes");
+        Assert.assertTrue(recipes2.size() == Constants.num_recipes);
+        Assert.assertFalse(recipes.equals(recipes2));
     }
 
 }
